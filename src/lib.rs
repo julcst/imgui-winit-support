@@ -123,7 +123,7 @@ impl CursorSettings {
         match self.cursor {
             Some(mouse_cursor) if !self.draw_cursor => {
                 window.set_cursor_visible(true);
-                window.set_cursor_icon(to_winit_cursor(mouse_cursor));
+                window.set_cursor(to_winit_cursor(mouse_cursor));
             }
             _ => window.set_cursor_visible(false),
         }
@@ -146,6 +146,7 @@ enum ActiveHiDpiMode {
 /// will use different logical coordinates, so be careful if you pass around logical size or
 /// position values.**
 #[derive(Copy, Clone, Debug, PartialEq)]
+#[allow(dead_code)]
 pub enum HiDpiMode {
     /// The DPI factor from winit is used directly without adjustment
     Default,
@@ -425,7 +426,8 @@ impl WinitPlatform {
             _ => (),
         }
     }
-    fn handle_window_event(&mut self, io: &mut Io, window: &Window, event: &WindowEvent) {
+    
+    pub fn handle_window_event(&mut self, io: &mut Io, window: &Window, event: &WindowEvent) {
         match *event {
             WindowEvent::Resized(physical_size) => {
                 let logical_size = physical_size.to_logical(window.scale_factor());
